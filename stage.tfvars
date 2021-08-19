@@ -9,4 +9,4 @@ repo_url           = "https://github.com/mykshtompel/web"
 branch_pattern     = "^refs/heads/main$"
 git_trigger_event  = "PUSH"
 app_count          = 3
-github_oauth_token = "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"
+github_oauth_token = "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"
