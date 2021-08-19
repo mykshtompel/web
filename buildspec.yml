@@ -1,36 +1,18 @@
 version: 0.2
 
-env:
-  variables:
-    CI: "true"
-    REPOSITORY_REGION: "us-east-2"
-    ENV: "stage"
-    APP_NAME: "app"
-    NAME_CONTAINER: nginx
-    TERRAFORM_VERSION: "1.0.2"
-
 phases:
   pre_build:
     commands:
-      - curl -sSL "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip" -o terraform.zip
-      - unzip terraform.zip -d /usr/local/bin && chmod +x /usr/local/bin/terraform
-      - export REGISTRY_ID=`aws sts get-caller-identity --output text | awk '{print $1}'`
-      - export REPO_NAME="${REGISTRY_ID}.dkr.ecr.${REPOSITORY_REGION}.amazonaws.com/${APP_NAME}-${ENV}"
-      - pip install jq
-      - echo "Getting existing tag"
-      - export SERVICE_ARN=$(aws ecs list-services --cluster ${APP_NAME}-${ENV}-cluster | jq -r .serviceArns[])
-      - export TASKDEF_ARN=$(aws ecs describe-services --cluster ${APP_NAME}-${ENV}-cluster --service ${SERVICE_ARN} | jq -r .services[].taskDefinition)
-      - export EXISTING_TAG=$(aws ecs describe-task-definition --task-definition ${TASKDEF_ARN} | jq -r .taskDefinition.containerDefinitions[].image | tr ':' ' ' | awk '{print $2}')
-      - echo "Current version is ${EXISTING_TAG}"
-
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
   build:
     commands:
-      - echo "Build and push docker images"
-      - export TAG="${CODEBUILD_RESOLVED_SOURCE_VERSION}-${ENV}"
-      - echo "Building version ${TAG}"
-      - make build
-
-      - cd ${CODEBUILD_SRC_DIR}
-      - terraform init
-      - terraform plan --var-file=".${ENV}.tfvars" -var="image_tag=${TAG}" -no-color -input=false -out plan.out
-      - terraform apply -auto-approve -no-color -input=false plan.out
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG ${CODEBUILD_SRC_DIR}/web/.
+      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
