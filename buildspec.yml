@@ -28,6 +28,7 @@ phases:
       - echo "Build and push docker images"
       - export TAG="${CODEBUILD_RESOLVED_SOURCE_VERSION}-${ENV}"
       - echo "Building version ${TAG}"
+      - cd "${CODEBUILD_SRC_DIR}"
       - make build
 
       - terraform init
