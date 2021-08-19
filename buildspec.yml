@@ -1,4 +1,17 @@
 version: 0.2
+env:
+  variables:
+    CI: "true"
+    REPOSITORY_REGION: "us-east-2"
+    ENV: "stage"
+    APP_NAME: "app"
+    NAME_CONTAINER: nginx
+    TERRAFORM_VERSION: "1.0.2"
+    AWS_DEFAULT_REGION: "us-east-2"
+    AWS_ACCOUNT_ID: "480681066960"
+    IMAGE_REPO_NAME: "app-stage-nginx" 
+    IMAGE_TAG: "0.0.2"
+
 
 phases:
   pre_build:
