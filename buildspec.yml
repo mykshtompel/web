@@ -30,7 +30,3 @@ phases:
       - echo "Building version ${TAG}"
       - cd "${CODEBUILD_SRC_DIR}"
       - make build
-
-      - terraform init
-      - terraform plan --var-file="./${ENV}.tfvars" -var="image_tag=${TAG}" -no-color -input=false -out plan.out
-      - terraform apply -auto-approve -no-color -input=false plan.out
