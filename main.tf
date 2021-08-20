@@ -3,16 +3,40 @@ module "s3_terraform_state" {
   source = "./modules/s3"
   bucket_name = var.bucket_name
 }
-
+*/
 module "ecr" {
-    source = "../modules//ecr"
-    aws_region = var.aws_region
-    aws_profile = var.aws_profile
-    remote_state_bucket = var.bucket_name
-    environment = var.environment
-    app_name = var.app_name
+  source = "./modules/ecr"
+  #aws_region  = var.aws_region
+  #aws_profile = var.aws_profile
+  #remote_state_bucket = var.bucket_name
+  env              = var.env
+  app              = var.app
+  name_container   = var.name_container
+  web_server_image = var.web_server_image
+
+}
+
+/*
+module "network" {
+  source = "./modules/network"
+
+  #cidr_block = "10.10.0.0/16"
+  #aws_dns    = true
+  env = "stage"
+  app = "app"
+  app_port          = 80
+  app_target_port   = 8080
+  health_check_path = "/"
+
+  name_container   = "nginx"
+  web_server_image = "447854022972.dkr.ecr.us-east-2.amazonaws.com/app-stage-nginx"
+  #web_server_count          = 1
+  #web_server_fargate_cpu    = 256
+  #web_server_fargate_memory = 512
+
 }
 */
+
 module "init-build" {
   source      = "./modules/init-build"
   aws_region  = var.aws_region

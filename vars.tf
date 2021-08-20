@@ -13,6 +13,11 @@ variable "aws_profile" {
   default = "nikolayshtompel"
 }
 
+variable "aws_account" {
+  type    = string
+  default = "480681066960"
+}
+
 variable "env" {
   type    = string
   default = "stage"
@@ -24,18 +29,18 @@ variable "app" {
 }
 
 variable "name_container" {
-  description = "The container name"
-  default     = "nginx"
+  default = "nginx"
+}
+
+variable "web_server_image" {
+  default = "480681066960.dkr.ecr.us-east-2.amazonaws.com/my_app-test-nginx"
 }
 
 variable "image_tag" {
-  type = string
+  type    = string
+  default = "0.0.1"
 }
 
-
-variable "aws_account" {
-  type = string
-}
 
 variable "github_oauth_token" {
   type    = string
