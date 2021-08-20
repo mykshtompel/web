@@ -4,6 +4,27 @@ module "s3_terraform_state" {
   bucket_name = var.bucket_name
 }
 */
+module "network" {
+  source = "./modules/network"
+
+  cidr_block        = "10.10.0.0/16"
+  aws_dns           = true
+  env               = var.env
+  app               = var.app
+  app_port          = 80
+  app_target_port   = 80
+  health_check_path = "/"
+  name_container    = var.name_container
+  #web_server_image          = var.web_server_image
+  image_tag                 = var.image_tag
+  ecr_repository_url        = module.ecr.aws_ecr_repository_url
+  web_server_count          = 1
+  web_server_fargate_cpu    = 256
+  web_server_fargate_memory = 512
+}
+
+
+
 module "ecr" {
   source = "./modules/ecr"
   #aws_region  = var.aws_region

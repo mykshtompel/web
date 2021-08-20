@@ -10,3 +10,7 @@ output "alb_hostname" {
 output "confirmation" {
   value = module.init-build.confirmation
 }
+
+output "alb_hostname" {
+  value = module.network.alb_hostname
+}
