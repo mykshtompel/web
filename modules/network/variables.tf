@@ -34,7 +34,7 @@ variable "aws_dns" {
 
 locals {
   number_public_subnets  = 2
-  number_private_subnets = 2
+  number_private_subnets = 1
   azs                    = data.aws_availability_zones.available.names
 }
 
@@ -69,7 +69,12 @@ variable "name_container" {
 #Variables for ECS
 variable "ecs_task_execution_role_name" {
   description = "ECS task execution role name"
-  default     = "myEcsTaskExecutionRole"
+  default     = "TaskExecutionRole"
+}
+
+variable "ecs_task_role_name" {
+  description = "ECS task role name"
+  default     = "TaskRole"
 }
 
 variable "web_server_image" {
@@ -105,4 +110,8 @@ variable "image_tag" {
 
 locals {
   image = format("%s:%s", var.ecr_repository_url, var.image_tag)
+}
+
+variable "taskdef_template" {
+  default = "cb_app.json.tpl"
 }

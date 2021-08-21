@@ -18,6 +18,7 @@ module "network" {
   #web_server_image          = var.web_server_image
   image_tag                 = var.image_tag
   ecr_repository_url        = module.ecr.aws_ecr_repository_url
+  taskdef_template          = "${path.root}/modules/network/cb_app.json.tpl"
   web_server_count          = 1
   web_server_fargate_cpu    = 256
   web_server_fargate_memory = 512
@@ -87,10 +88,10 @@ module "codebuild" {
   aws_region  = var.aws_region
   aws_profile = var.aws_profile
   #remote_state_bucket = var.bucket_name
-  env = var.env
-  app = var.app
-  #vpc_id = module.ecs-cluster.vpc_id
-  #subnets = module.ecs-cluster.subnets
+  env                = var.env
+  app                = var.app
+  vpc_id             = module.network.vpc_id
+  subnets            = module.network.private_subnet_ids
   github_oauth_token = var.github_oauth_token
   repo_url           = var.repo_url
   branch_pattern     = var.branch_pattern

@@ -26,12 +26,12 @@ resource "aws_iam_role" "role" {
 }
 EOF
 }
-/*
+
 resource "aws_iam_role_policy_attachment" "ecs_full_access" {
-  role = aws_iam_role.role.name
+  role       = aws_iam_role.role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonECS_FullAccess"
 }
-*/
+
 
 # CodeBuild IAM policy (one per project)
 # https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAM.ServiceLinkedRoles.html

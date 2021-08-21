@@ -27,7 +27,7 @@ variable "app" {
 variable "build_spec_file" {
   default = "buildspec.yml"
 }
-/*
+
 variable "vpc_id" {
   type        = string
   default     = null
@@ -45,7 +45,7 @@ variable "security_groups" {
   default     = null
   description = "The security group IDs used by CodeBuild to allow access to resources in the VPC"
 }
-*/
+
 variable "env_vars" {
   description = <<EOF
 Pass env vars for codebuild project(in native for codebuild project format)

@@ -33,7 +33,7 @@ phases:
 
       - terraform init
       - terraform plan -target=module.network --var-file="./${ENV}.tfvars" -var="image_tag=${TAG}" -no-color -input=false -out plan.out
-      - terraform apply -target=module.network --var-file="./${ENV}.tfvars" -var="image_tag=${TAG}" -auto-approve -no-color -input=false plan.out
+      - terraform apply -auto-approve -no-color -input=false plan.out
 
   post_build:
     commands:

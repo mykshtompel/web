@@ -1,5 +1,5 @@
 data "aws_region" "current" {}
-/*
+
 resource "aws_security_group" "codebuild_sg" {
   name        = "allow_vpc_connectivity"
   description = "Allow Codebuild connectivity to all the resources within our VPC"
@@ -19,7 +19,7 @@ resource "aws_security_group" "codebuild_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
-*/
+
 resource "null_resource" "import_source_credentials" {
 
 
@@ -88,7 +88,7 @@ resource "aws_codebuild_project" "project" {
   //     security_group_ids = var.security_groups
   //   }
   // }
-  /*
+
   vpc_config {
     vpc_id = var.vpc_id
 
@@ -96,7 +96,7 @@ resource "aws_codebuild_project" "project" {
 
     security_group_ids = [aws_security_group.codebuild_sg.id]
   }
-  */
+
 }
 
 
