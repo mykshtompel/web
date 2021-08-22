@@ -21,6 +21,9 @@ variable "aws_region" {
   default     = "us-east-2"
 }
 
+variable "aws_profile" {
+  description = "aws profile"
+}
 #Variables for Network
 variable "cidr_block" {
   description = "The CIDR block of the project"
@@ -115,3 +118,5 @@ locals {
 variable "taskdef_template" {
   default = "cb_app.json.tpl"
 }
+
+variable "remote_state_bucket" {}

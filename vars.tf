@@ -1,10 +1,10 @@
-/*
+
 variable "bucket_name" {
   type        = string
   description = "S3 Bucket name"
-  default     = "flaskapp-dev-eu-west-1"
+  default     = "nginx-stage-us-east-2"
 }
-*/
+
 variable "aws_region" {
   default = "us-east-2"
 }

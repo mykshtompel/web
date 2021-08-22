@@ -16,6 +16,14 @@ variable "app" {
   default     = "my_app"
 }
 
+variable "aws_region" {
+  description = "aws region"
+}
+
+variable "aws_profile" {
+  description = "aws profile"
+}
+
 /*
 variable "region" {
   description = "The AWS region for the project"
@@ -100,3 +108,4 @@ variable "web_server_fargate_memory" {
   default     = 512
 }
 */
+variable "remote_state_bucket" {}

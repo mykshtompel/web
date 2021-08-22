@@ -6,7 +6,7 @@ variable "aws_profile" {
   description = "aws profile"
 }
 
-#variable "remote_state_bucket" {}
+variable "remote_state_bucket" {}
 
 variable "image_tag" {
   type = string
