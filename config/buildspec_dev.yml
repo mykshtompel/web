@@ -4,8 +4,8 @@ env:
   variables:
     CI: "true"
     REPOSITORY_REGION: "us-east-2"
-    ENV: "stage"
-    APP_NAME: "app"
+    ENV: "dev"
+    APP_NAME: "web"
     NAME_CONTAINER: nginx
     TERRAFORM_VERSION: "1.0.2"
 
@@ -19,7 +19,9 @@ phases:
       - pip install jq
       - echo "Getting existing tag"
       - export SERVICE_ARN=$(aws ecs list-services --cluster ${APP_NAME}-${ENV}-cluster | jq -r .serviceArns[])
+      - echo "Current service arn is ${SERVICE_ARN}"
       - export TASKDEF_ARN=$(aws ecs describe-services --cluster ${APP_NAME}-${ENV}-cluster --service ${SERVICE_ARN} | jq -r .services[].taskDefinition)
+      - echo "Current taskdef arn is ${TASKDEF_ARN}"
       - export EXISTING_TAG=$(aws ecs describe-task-definition --task-definition ${TASKDEF_ARN} | jq -r .taskDefinition.containerDefinitions[].image | tr ':' ' ' | awk '{print $2}')
       - echo "Current version is ${EXISTING_TAG}"
 
@@ -32,7 +34,7 @@ phases:
       - make build
 
       - terraform init
-      - terraform plan -target=module.network --var-file="./${ENV}.tfvars" -var="image_tag=${TAG}" -no-color -input=false -out plan.out
+      - terraform plan -target=module.network -var="image_tag=${TAG}" -no-color -input=false -out plan.out
       - terraform apply -auto-approve -no-color -input=false plan.out
 
   post_build:
@@ -43,7 +45,9 @@ phases:
           while [ "${NEW_TAG}" != "${TAG}" ];
           do
             NEW_SERVICE_ARN=$(aws ecs list-services --cluster ${APP_NAME}-${ENV}-cluster | jq -r .serviceArns[])
+            echo "Current service arn is ${NEW_SERVICE_ARN}"
             NEW_TASKDEF_ARN=$(aws ecs describe-services --cluster ${APP_NAME}-${ENV}-cluster --service ${NEW_SERVICE_ARN} | jq -r .services[].taskDefinition)
+            echo "Current taskdef arn is ${NEW_TASKDEF_ARN}"
             NEW_TAG=$(aws ecs describe-task-definition --task-definition ${NEW_TASKDEF_ARN} | jq -r .taskDefinition.containerDefinitions[].image | tr ':' ' ' | awk '{print $2}')
             echo "Waiting until new image started... Tag: ${TAG} New tag: ${NEW_TAG}"
             if [ "${NEW_TAG}" != ${TAG} ]; then

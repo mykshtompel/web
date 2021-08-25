@@ -1,20 +1,18 @@
-provider "aws" {
-  region  = var.aws_region
-  profile = var.aws_profile
-}
-
 terraform {
+  required_version = "= 1.0.2"
 
   backend "s3" {
-    encrypt = true
-    bucket  = "nginx-stage-us-east-2"
+    bucket  = "bucket-web-dev-nginx-us-east-2"
+    key     = "live/dev/terraform.tfstate"
     region  = "us-east-2"
-    key     = "state"
+    encrypt = true
   }
+
 
   required_providers {
     aws = {
-      version = "~> 3.35"
+      source  = "hashicorp/aws"
+      version = "= 3.55"
     }
   }
 }
