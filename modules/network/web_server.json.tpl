@@ -1,6 +1,6 @@
 [
   {
-    "name": "${app}-${env}-${var.name_container}-web-server",
+    "name": "${app}-${env}-${name_container}-web-server",
     "image": "${image}",
     "cpu": ${web_server_fargate_cpu},
     "memory": ${web_server_fargate_memory},
