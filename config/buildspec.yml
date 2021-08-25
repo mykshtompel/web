@@ -18,12 +18,15 @@ phases:
       - export REPO_NAME="${REGISTRY_ID}.dkr.ecr.${REPOSITORY_REGION}.amazonaws.com/${APP_NAME}-${ENV}-${NAME_CONTAINER}"
       - pip install jq
       - echo "Getting existing tag"
-      - export SERVICE_ARN=$(aws ecs list-services --cluster ${APP_NAME}-${ENV}-cluster | jq -r .serviceArns[])
+      - SERVICE_ARN=$(aws ecs list-services --cluster ${APP_NAME}-${ENV}-cluster | jq -r .serviceArns[])
       - echo "Current service arn is ${SERVICE_ARN}"
-      - export TASKDEF_ARN=$(aws ecs describe-services --cluster ${APP_NAME}-${ENV}-cluster --service ${SERVICE_ARN} | jq -r .services[].taskDefinition)
+      - export SERVICE_ARN
+      - TASKDEF_ARN=$(aws ecs describe-services --cluster ${APP_NAME}-${ENV}-cluster --service ${SERVICE_ARN} | jq -r .services[].taskDefinition)
       - echo "Current taskdef arn is ${TASKDEF_ARN}"
-      - export EXISTING_TAG=$(aws ecs describe-task-definition --task-definition ${TASKDEF_ARN} | jq -r .taskDefinition.containerDefinitions[].image | tr ':' ' ' | awk '{print $2}')
+      - export TASKDEF_ARN
+      - EXISTING_TAG=$(aws ecs describe-task-definition --task-definition ${TASKDEF_ARN} | jq -r .taskDefinition.containerDefinitions[].image | tr ':' ' ' | awk '{print $2}')
       - echo "Current version is ${EXISTING_TAG}"
+      - export EXISTING_TAG
 
   build:
     commands:
@@ -31,6 +34,7 @@ phases:
       - export TAG="${CODEBUILD_RESOLVED_SOURCE_VERSION}-${ENV}"
       - echo "Building version ${TAG}"
       - cd "${CODEBUILD_SRC_DIR}"
+      - echo "Current codebuild src directory is ${CODEBUILD_SRC_DIR}"
       - make build
 
       - terraform init
