@@ -13,7 +13,7 @@ module "elastic_container_registry" {
 
 module "initial_build" {
   source         = "../../modules/init-build"
-  working_dir    = "${path.root}/app"
+  working_dir    = "${path.root}/live/dev/app"
   image_tag      = var.image_tag
   app            = var.app
   env            = var.env
