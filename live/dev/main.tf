@@ -44,7 +44,7 @@ module "codebuild" {
   repo_url           = var.repo_url
   branch_pattern     = var.branch_pattern
   git_trigger_event  = var.git_trigger_event
-  build_spec_file    = "${path.root}/config/buildspec_dev.yml"
+  build_spec_file    = "${path.root}/live/dev/config/buildspec_dev.yml"
   app                = var.app
   env                = var.env
   name_container     = var.name_container
