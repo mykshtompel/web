@@ -8,7 +8,7 @@ resource "null_resource" "build" {
       APP               = var.app
       ENV               = var.env
       NAME_CONTAINER    = var.name_container
-      IMAGE_TAG         = var.image_tag
+      TAG               = var.image_tag
     }
   }
 }

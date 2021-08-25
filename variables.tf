@@ -50,7 +50,7 @@ variable "image_tag" {
 #Variables for module "network"
 variable "cidr_block" {
   description = "The CIDR block of the project"
-  default     = "10.0.0.0/16"
+  default     = "10.10.0.0/16"
 }
 
 variable "app_port" {
