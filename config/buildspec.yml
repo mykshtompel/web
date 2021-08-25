@@ -37,6 +37,7 @@ phases:
       - cd "${CODEBUILD_SRC_DIR}/app"
       - make build
 
+      - cd ${CODEBUILD_SRC_DIR}
       - terraform init
       - terraform plan -target=module.network -var="image_tag=${TAG}" -no-color -input=false -out plan.out
       - terraform apply -auto-approve -no-color -input=false plan.out
@@ -48,9 +49,9 @@ phases:
           NEWTAG=''
           while [ "${NEW_TAG}" != "${TAG}" ];
           do
-            NEW_SERVICE_ARN=$(aws ecs list-services --cluster ${APP_NAME}-${ENV}-cluster | jq -r .serviceArns[])
+            NEW_SERVICE_ARN=$(aws ecs list-services --cluster ${APP}-${ENV}-${NAME_CONTAINER}-cluster | jq -r .serviceArns[])
             echo "Current service arn is ${NEW_SERVICE_ARN}"
-            NEW_TASKDEF_ARN=$(aws ecs describe-services --cluster ${APP_NAME}-${ENV}-cluster --service ${NEW_SERVICE_ARN} | jq -r .services[].taskDefinition)
+            NEW_TASKDEF_ARN=$(aws ecs describe-services --cluster ${APP}-${ENV}-${NAME_CONTAINER}-cluster --service ${NEW_SERVICE_ARN} | jq -r .services[].taskDefinition)
             echo "Current taskdef arn is ${NEW_TASKDEF_ARN}"
             NEW_TAG=$(aws ecs describe-task-definition --task-definition ${NEW_TASKDEF_ARN} | jq -r .taskDefinition.containerDefinitions[].image | tr ':' ' ' | awk '{print $2}')
             echo "Waiting until new image started... Tag: ${TAG} New tag: ${NEW_TAG}"
